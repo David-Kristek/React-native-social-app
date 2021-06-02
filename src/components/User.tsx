@@ -14,7 +14,7 @@ export default function User({size} : Props) {
         alignItems: "center",
       }}
     >
-      <Icon name="user" size={size * 4} color="blue" />
+      <Icon name="user" size={size * 4} color="navy" />
       <Text style={{ paddingLeft: 5, fontSize: size * 3.4 }}>David Křístek</Text>
     </View>
   );

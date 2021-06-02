@@ -8,6 +8,9 @@ export default StyleSheet.create({
     fontWeight: "bold",
     fontSize: 25,
   },
+  h3: {
+    fontSize: 22,
+  },
   link: {
     color: "blue",
     textDecorationLine: "underline",

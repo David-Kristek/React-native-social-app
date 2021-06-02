@@ -12,6 +12,7 @@ const DATA = [
       require("../../../../assets/Mountain.png"),
       require("../../../../assets/bike.jpg"),
     ],
+    text: "It was popularised in the 1960s with the release of Letraset sheets containing Lorem"
   },
   {
     id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
@@ -20,6 +21,8 @@ const DATA = [
       require("../../../../assets/flowers.jpg"),
       require("../../../../assets/Mountain.png"),
     ],
+    text: "It was popularised in the 1960s with the release of Letraset sheets containing Lorem"
+
   },
 
   {
@@ -29,6 +32,8 @@ const DATA = [
       require("../../../../assets/tiger.jpg"),
       require("../../../../assets/flowers.jpg"),
     ],
+    text: "It was popularised in the 1960s with the release of Letraset sheets containing Lorem"
+
   },
   {
     id: "58694a0fa-da1-471f-bd96-145571e29d72",
@@ -51,9 +56,9 @@ function Index() {
         </View>
       </Header>
       <FlatList
+        style={style.flatList}
         data={DATA}
         renderItem={renderItem}
-        // jako key
         keyExtractor={(item) => item.id}
       />
     </View>
@@ -68,5 +73,9 @@ const style = StyleSheet.create({
     paddingRight: "5%",
     paddingLeft: "2%",
   },
+  flatList: {
+    paddingVertical: -580,
+    paddingTop: 20
+  }
 });
 export default Index;

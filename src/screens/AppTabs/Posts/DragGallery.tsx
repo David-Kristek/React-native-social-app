@@ -8,7 +8,7 @@ interface Props {
 }
 export default function DragGallery({ images }: Props) {
   const [visible, setVisible] = useState([0]);
-  const _onViewableItemsChanged = useCallback(({ viewableItems, changed }) => {
+  const _onViewableItemsChanged = useCallback(({ viewableItems }) => {
     var viewList: any[] = viewableItems;
     var viewList = viewList.map((item) => item.index);
     setVisible(viewList);
@@ -16,19 +16,23 @@ export default function DragGallery({ images }: Props) {
 
   const screenWidth = Dimensions.get("window").width;
   return (
-    <FlatList
-      horizontal={true}
-      data={images}
-      renderItem={({ item, index }) => (
-        <View>
-          {images.length > 1 && <ActShower max={images.length} index={index} />}
-          <PostImage img={item} vis={visible} id={index} key={index} />
-        </View>
-      )}
-      snapToAlignment={"start"}
-      decelerationRate={"normal"}
-      snapToInterval={screenWidth}
-      onViewableItemsChanged={_onViewableItemsChanged}
-    />
+    <View>
+      {images.length > 1 && <ActShower max={images.length} index={visible[0]} />}
+
+      <FlatList
+        horizontal={true}
+        data={images}
+        renderItem={({ item, index }) => (
+          <View>
+            <PostImage img={item} vis={visible} id={index} />
+          </View>
+        )}
+        snapToAlignment={"start"}
+        decelerationRate={"normal"}
+        snapToInterval={screenWidth}
+        onViewableItemsChanged={_onViewableItemsChanged}
+        keyExtractor={(item, index) => 'key'+index}
+      />
+    </View>
   );
 }
