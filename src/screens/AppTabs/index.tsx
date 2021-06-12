@@ -5,6 +5,9 @@ import { AppParamList } from "./AppParamList";
 import { AntDesign, Ionicons, EvilIcons } from "@expo/vector-icons";
 import Posts from "./Posts";
 import Messages from "./Messages"; 
+import SelectImages from "../../components/SelectImages";
+
+
 interface AppTabsProps {}
 
 const Tabs = createBottomTabNavigator<AppParamList>();
@@ -35,8 +38,6 @@ const AppTabs: React.FC<AppTabsProps> = ({}) => {
         activeTintColor: "dodgerblue",
         inactiveTintColor: "gray"
       }}
-      
-      
     >
       <Tabs.Screen name="Home" component={Posts} />
       <Tabs.Screen name="Messages" component={Messages} />

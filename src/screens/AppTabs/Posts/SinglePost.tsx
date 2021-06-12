@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
-import { PostImage } from "../../../components/Images";
 import Icon from "react-native-vector-icons/AntDesign";
 import Icona from "react-native-vector-icons/FontAwesome";
 import { Input } from "react-native-elements";

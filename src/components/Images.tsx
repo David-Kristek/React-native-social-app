@@ -40,7 +40,6 @@ export function PostImage({ img, vis, id }: Props2) {
     },
   });
   useEffect(() => {
-    console.log(vis);
 
     setHeight(
       vis.includes(id) ? screenWidth / (imageInfo.width / imageInfo.height) : 0

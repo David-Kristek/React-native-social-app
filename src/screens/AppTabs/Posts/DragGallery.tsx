@@ -17,7 +17,9 @@ export default function DragGallery({ images }: Props) {
   const screenWidth = Dimensions.get("window").width;
   return (
     <View>
-      {images.length > 1 && <ActShower max={images.length} index={visible[0]} />}
+      {images.length > 1 && (
+        <ActShower max={images.length} index={visible[0]} />
+      )}
 
       <FlatList
         horizontal={true}
@@ -31,7 +33,7 @@ export default function DragGallery({ images }: Props) {
         decelerationRate={"normal"}
         snapToInterval={screenWidth}
         onViewableItemsChanged={_onViewableItemsChanged}
-        keyExtractor={(item, index) => 'key'+index}
+        keyExtractor={(item, index) => "key" + index}
       />
     </View>
   );
