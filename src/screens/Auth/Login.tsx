@@ -11,6 +11,11 @@ function Login({ navigation }: AuthNavProps<"Login">) {
   const { login } = useContext(AuthContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false)
+  const handleSubmit = (e : any) => {
+    e.preventDefault();
+    login();
+  }
 
   return (
     <View style={styles.container}>
@@ -50,9 +55,7 @@ function Login({ navigation }: AuthNavProps<"Login">) {
             />
           }
           iconRight
-          onPress={() => {
-            login();
-          }}
+          onPress={handleSubmit}
         />
         <Text style={[preStyles.font3, { paddingTop: 10 }]}>
           Ještě nemáte účet?{" "}

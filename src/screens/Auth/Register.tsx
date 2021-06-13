@@ -8,10 +8,26 @@ import { AuthContext } from "../../context/AuthContext";
 import preStyles from "../../styles/main";
 import { Logo } from "../../components/Images";
 
-function Login({ navigation }: AuthNavProps<"Login">) {
-  const { login } = useContext(AuthContext);
+function Register({ navigation }: AuthNavProps<"Register">) {
+  const { register } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [password_confirmation, setpassword_confirmation] = useState("");
+
+  const onSubmit = (e : any) => {
+    e.preventDefault(); 
+    register({
+      username,
+      email,
+      password,
+      password_confirmation,
+      setLoading,
+    }).then(res => {
+      console.log(res);
+    });
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -36,7 +52,7 @@ function Login({ navigation }: AuthNavProps<"Login">) {
             placeholder="Email"
             rightIcon={<Icon name="envelope" size={24} color="grey" />}
             onChangeText={(value) => {
-              setUsername(value);
+              setEmail(value);
             }}
             // errorMessage="Something bad"
           />
@@ -52,7 +68,7 @@ function Login({ navigation }: AuthNavProps<"Login">) {
             placeholder="Potvrďte heslo"
             rightIcon={<Icon name="lock" size={24} color="grey" />}
             onChangeText={(value) => {
-              setPassword(value);
+              setpassword_confirmation(value);
             }}
             secureTextEntry
           />
@@ -69,9 +85,9 @@ function Login({ navigation }: AuthNavProps<"Login">) {
               />
             }
             iconRight
-            onPress={() => {
-              login();
-            }}
+            onPress={
+              onSubmit
+            }
           />
           <Text style={[preStyles.font3, { paddingTop: 10 }]}>
             Máte už účet?{" "}
@@ -103,4 +119,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-export default Login;
+export default Register;
