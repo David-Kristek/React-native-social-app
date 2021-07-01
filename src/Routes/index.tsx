@@ -4,10 +4,11 @@ import { AuthContext } from "../context/AuthContext";
 import { Text } from "react-native";
 import Auth from "../screens/Auth";
 import App from "../screens/AppTabs";
+import LoadingScreen from "../components/AppLoading"; 
 function Routes() {
-  const { user, login } = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);
 
-  return <NavigationContainer>{user ? <App /> : <Auth />}</NavigationContainer>;
+  return <NavigationContainer>{loading ? <LoadingScreen /> : user ? <App /> : <Auth />}</NavigationContainer>;
 }
 
 export default Routes;

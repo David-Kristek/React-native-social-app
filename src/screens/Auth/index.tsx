@@ -22,6 +22,7 @@ const AuthStack: React.FC = ({}) => {
           // }}
           name="Login"
           component={Login}
+          initialParams={{ nowLogin: false }}
         />
         <Stack.Screen
           // options={{

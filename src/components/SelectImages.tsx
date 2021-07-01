@@ -27,7 +27,7 @@ export default function SelectImages({
       .then((photos) => {
         setphotoList(photos);
       })
-      .catch((e: Error) => console.log(e));
+      .catch((e: Error) => console.log(e)); 
   };
 
   const updateHandler = (count: number, onUpdate: any) => {
