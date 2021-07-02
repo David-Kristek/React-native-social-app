@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import Header from "../screens/AppTabs/Posts/Header";
+import Header from "../Header";
 // @ts-ignore
 import { ImageBrowser } from "expo-image-picker-multiple";
 import Icon from "react-native-vector-icons/AntDesign";
 import Icona from "react-native-vector-icons/FontAwesome";
 
-import { PostsParamProps } from "../screens/AppTabs/Posts/PostsParamList";
+import { PostsParamProps } from "../PostsParamList";
 
 export default function SelectImages({
   navigation,
@@ -21,13 +21,12 @@ export default function SelectImages({
   );
   // @ts-ignore
   const imagesCallback = (callback) => {
-    console.log("update");
     // @ts-ignore
     callback // @ts-ignore
       .then((photos) => {
         setphotoList(photos);
       })
-      .catch((e: Error) => console.log(e)); 
+      .catch((e: Error) => console.log(e));
   };
 
   const updateHandler = (count: number, onUpdate: any) => {
@@ -36,8 +35,9 @@ export default function SelectImages({
   };
 
   const onSubmit = () => {
-    if (photosCount < 1) return;
+    if (photosCount < 1 || !photoList) return;
     console.log(photoList);
+    navigation.navigate("AddPost", { images: photoList });
   };
 
   return (

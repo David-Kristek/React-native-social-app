@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { GlobalContext } from "./GlobalContext";
 // import { AsyncStorage } from "react-native";
 import * as Auth from "./logic/Auth";
 
@@ -12,7 +13,6 @@ interface AuthContextInterface {
   register: (obj: any) => Promise<any>;
   logout: () => void;
   setUser: (obj: any) => void;
-  loading: boolean;
 }
 
 export const AuthContext = React.createContext<AuthContextInterface>({
@@ -21,18 +21,16 @@ export const AuthContext = React.createContext<AuthContextInterface>({
   logout: () => {},
   register: async () => {},
   setUser: () => {},
-  loading: true,
 });
 
 interface AuthProviderProps {}
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User>(null);
-  const [loading, setLoading] = useState(true);
+  const { setLoading } = useContext(GlobalContext);
   useEffect(() => {
     // loading screen
     Auth.checkAuth().then((res) => {
-      console.log(res);
       if (res) {
         setUser({
           username: res.name,
@@ -54,7 +52,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           //  clear token
         },
         setUser: setUser,
-        loading: loading,
       }}
     >
       {children}

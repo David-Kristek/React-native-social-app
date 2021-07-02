@@ -6,12 +6,11 @@ export type PostsParamList = {
   SelectPhotos: undefined;
   User: undefined;
   SelectPhoto: undefined;
-  AddPhoto: {
-    images: [
-      {
-        path: string;
-      }
-    ];
+  AddPost: {
+    images: {
+      uri: string;
+      id: string; 
+    }[];
   };
 };
 

@@ -5,6 +5,7 @@ import { Logo } from "../../../components/Images";
 import Header from "./Header";
 import SinglePost from "./SinglePost";
 import { PostsParamProps } from "./PostsParamList";
+import PostLogic from "./Logic/PostLogic";
 
 const DATA = [
   {
@@ -46,7 +47,7 @@ const DATA = [
   },
 ];
 function Index({ navigation }: PostsParamProps<"HomeScreen">) {
-  const [photo, setPhoto] = useState<any>();
+  const { posts } = PostLogic();
   const addPost = () => {
     navigation.navigate("SelectPhotos");
   };

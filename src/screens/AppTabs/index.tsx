@@ -5,7 +5,7 @@ import { AppParamList } from "./AppParamList";
 import { AntDesign, Ionicons, EvilIcons } from "@expo/vector-icons";
 import Posts from "./Posts";
 import Messages from "./Messages"; 
-import SelectImages from "../../components/SelectImages";
+import SelectImages from "./Posts/AddPost/SelectImages";
 
 
 interface AppTabsProps {}
