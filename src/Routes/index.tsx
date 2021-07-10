@@ -5,16 +5,14 @@ import { Text } from "react-native";
 import Auth from "../screens/Auth";
 import App from "../screens/AppTabs";
 import LoadingScreen from "../components/AppLoading";
-import { GlobalContext } from "../context/GlobalContext";
+import { PostsContext } from "../context/PostsContext";
 function Routes() {
-  const { user } = useContext(AuthContext);
-  const { loading } = useContext(GlobalContext);
-  useEffect(() => {
-    console.log(loading);
-  }, [loading]); 
+  const { user, loading } = useContext(AuthContext);
+  const { postloading } = useContext(PostsContext);
+
   return (
     <NavigationContainer>
-      {loading ? <LoadingScreen /> : user ? <App /> : <Auth />}
+      {loading || postloading ? <LoadingScreen /> : user ? <App /> : <Auth />}
     </NavigationContainer>
   );
 }

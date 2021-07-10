@@ -10,6 +10,15 @@ declare global {
       name: string;
     };
   }
+  interface FormDataValue {
+    uri: string;
+    name: string;
+    type: string;
+  }
+  interface FormData {
+    append(name: string, value: FormDataValue, fileName?: string): void;
+    set(name: string, value: FormDataValue, fileName?: string): void;
+  }
   interface Post {
     _id: string;
     location: {
@@ -21,8 +30,9 @@ declare global {
     images: string[];
     name: string;
     description: string;
-    createdByUser: User;
+    createdByUser: otherUser;
     createdAt: Date;
+    dateInString: string; 
     likedByUsers: otherUser[];
     comments: Comment[];
   }

@@ -36,7 +36,6 @@ export default function SelectImages({
 
   const onSubmit = () => {
     if (photosCount < 1 || !photoList) return;
-    console.log(photoList);
     navigation.navigate("AddPost", { images: photoList });
   };
 

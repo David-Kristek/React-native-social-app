@@ -1,7 +1,8 @@
 import axios from "axios";
 import React, { useContext } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../../context/AuthContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 interface Register {
   e: any;
   name: string;
@@ -14,7 +15,7 @@ const fetchData = async (method: Method, url: string, body?: any) => {
   try {
     const response = await axios({
       method,
-      url: "http://10.0.0.7:5000/api/auth/" + url,
+      url: "http://social-site-server.herokuapp.com/api/auth/" + url,
       headers: {
         // token: localStorage.getItem("token"),
         // "auth-type": localStorage.getItem("auth-type"),
@@ -45,6 +46,7 @@ export const handleRegiser = async ({
       return res.data.error;
     }
   }
+  console.log(res);
   return "Oops, něco se pokazilo";
   // now login
 };
@@ -73,13 +75,12 @@ export const handleLogin = async (email: string, password: string) => {
   }
   return { email: "", password: "", all: "Oops, něco se pokazilo" };
 };
-export const checkAuth = async () => {
-  const token = await AsyncStorage.getItem("token");
+export const checkAuth = async (token: string) => {
   if (token) {
     try {
       const response = await axios({
         method: "GET",
-        url: "http://10.0.0.7:5000/api/auth/is_logged",
+        url: "http://social-site-server.herokuapp.com/api/auth/is_logged",
         headers: {
           token: token,
           "auth-type": "jwt",
@@ -87,7 +88,6 @@ export const checkAuth = async () => {
       });
       if (response.data.msg === "success") return response.data.user;
       else return false;
-      return response;
     } catch (err) {
       return { err };
     }

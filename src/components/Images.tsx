@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Image, StyleSheet, Text, Dimensions } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  ImageBackground,
+  Dimensions,
+  View,
+  TouchableWithoutFeedback,
+} from "react-native";
+// @ts-ignore
+import ImageLoad from "react-native-image-placeholder";
 
 interface Props {
   size: number;
@@ -16,35 +25,53 @@ export function Logo({ size }: Props) {
   return <Image source={require("../../assets/Logo.png")} style={styles.img} />;
 }
 interface Props2 {
-  img: any;
+  uri: string;
   id: number;
   vis: any[];
+  onPress: () => void;
 }
 type ImageSize = {
   width: number;
   height: number;
 };
-export function PostImage({ img, vis, id }: Props2) {
-  const [height, setHeight] = useState(0);
+export function PostImage({ uri, vis, id, onPress }: Props2) {
+  const imageUri = uri;
   var screenWidth = Dimensions.get("window").width;
-  // pak obrazky pomoci uri: imageUrl - fetched from api
-  // s uri
-  // Image.getSize(myUri, (width, height) => {this.setState({width, height})});
-
-  const imageInfo = Image.resolveAssetSource(img);
-  const style = StyleSheet.create({
-    imgS: {
-      resizeMode: "cover",
-      height: height,
-      width: screenWidth,
-    },
+  const [loading, setLoading] = useState(true);
+  const [imageSize, setImageSize] = useState<ImageSize>({
+    height: 0,
+    width: 0,
   });
   useEffect(() => {
-
-    setHeight(
-      vis.includes(id) ? screenWidth / (imageInfo.width / imageInfo.height) : 0
-    );
+    Image.getSize(imageUri, (width, height) => {
+      setImageSize({
+        height: vis.includes(id) ? screenWidth / (width / height) : 250,
+        width: screenWidth,
+      });
+    });
   }, [vis]);
 
-  return <Image source={img} style={style.imgS} />;
+  return (
+    <TouchableWithoutFeedback
+      onPress={onPress}
+      style={{
+        height: imageSize.height,
+        width: imageSize.width,
+        backgroundColor: "white",
+        // minHeight: 300,
+      }}
+    >
+      <Image
+        source={{
+          uri: imageUri,
+        }}
+        resizeMode={"cover"}
+        style={{
+          height: imageSize.height,
+          width: imageSize.width,
+        }}
+      />
+    </TouchableWithoutFeedback>
+  );
+  // return <></>;
 }

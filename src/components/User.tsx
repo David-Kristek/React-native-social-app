@@ -3,10 +3,11 @@ import { View, Text } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 interface Props {
-    size : number,
+  size: number;
+  title: string | undefined;
 }
 
-export default function User({size} : Props) {
+export default function User({ size, title }: Props) {
   return (
     <View
       style={{
@@ -15,7 +16,9 @@ export default function User({size} : Props) {
       }}
     >
       <Icon name="user" size={size * 4} color="navy" />
-      <Text style={{ paddingLeft: 5, fontSize: size * 3.4 }}>David Křístek</Text>
+      <Text style={{ paddingLeft: 5, fontSize: size * 3.4 }}>
+        {title}
+      </Text>
     </View>
   );
 }

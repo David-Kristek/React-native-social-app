@@ -1,57 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Logo } from "../../../components/Images";
 import Header from "./Header";
 import SinglePost from "./SinglePost";
 import { PostsParamProps } from "./PostsParamList";
-import PostLogic from "./Logic/PostLogic";
+import { PostsContext } from "../../../context/PostsContext";
 
-const DATA = [
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    title: "First Item",
-    img: [
-      require("../../../../assets/Mountain.png"),
-      require("../../../../assets/bike.jpg"),
-    ],
-    text: "It was popularised in the 1960s with the release of Letraset sheets containing Lorem",
-  },
-  {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    title: "Second Item",
-    img: [
-      require("../../../../assets/flowers.jpg"),
-      require("../../../../assets/Mountain.png"),
-    ],
-    text: "It was popularised in the 1960s with the release of Letraset sheets containing Lorem",
-  },
-
-  {
-    id: "58694a0f-3da1-471f-bd96-145571e29d72",
-    title: "Third Item",
-    img: [
-      require("../../../../assets/tiger.jpg"),
-      require("../../../../assets/flowers.jpg"),
-    ],
-    text: "It was popularised in the 1960s with the release of Letraset sheets containing Lorem",
-  },
-  {
-    id: "58694a0fa-da1-471f-bd96-145571e29d72",
-    title: "Third Item",
-    img: [
-      require("../../../../assets/bike.jpg"),
-      require("../../../../assets/tiger.jpg"),
-      require("../../../../assets/flowers.jpg"),
-    ],
-  },
-];
 function Index({ navigation }: PostsParamProps<"HomeScreen">) {
-  const { posts } = PostLogic();
+  const { posts, newFetch } = useContext(PostsContext);
+  const [refreshing, setRefreshing] = useState(false);
+  const wait = (timeout: number) => {
+    return new Promise((resolve) => setTimeout(resolve, timeout));
+  };
   const addPost = () => {
     navigation.navigate("SelectPhotos");
   };
-  const renderItem = ({ item }: any) => <SinglePost item={item} />;
+  const RefreshHandler = () => {
+    setRefreshing(true);
+    newFetch();
+    wait(1000).then(() => setRefreshing(false));
+  };
+  const renderItem = (item: any) => <SinglePost item={item} />;
   return (
     <View>
       <Header>
@@ -67,9 +37,11 @@ function Index({ navigation }: PostsParamProps<"HomeScreen">) {
       </Header>
       <FlatList
         style={style.flatList}
-        data={DATA}
+        data={posts}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
+        onRefresh={RefreshHandler}
+        refreshing={refreshing}
       />
     </View>
   );
@@ -84,8 +56,8 @@ const style = StyleSheet.create({
     paddingLeft: "2%",
   },
   flatList: {
-    paddingVertical: -580,
     paddingTop: 20,
+    marginBottom: 100,
   },
 });
 export default Index;

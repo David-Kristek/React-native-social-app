@@ -1,16 +1,16 @@
 import React from "react";
 import { AuthProvider } from "../context/AuthContext";
+import { PostsProvider } from "./PostsContext";
 import Routes from "../Routes";
-import { GlobalProvider } from "./GlobalContext";
 
 interface ProvidersProps {}
 
 export const Providers: React.FC<ProvidersProps> = ({}) => {
   return (
-    <GlobalProvider>
-      <AuthProvider>
+    <AuthProvider>
+      <PostsProvider>
         <Routes />
-      </AuthProvider>
-    </GlobalProvider>
+      </PostsProvider>
+    </AuthProvider>
   );
 };
