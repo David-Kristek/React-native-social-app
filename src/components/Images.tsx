@@ -35,7 +35,8 @@ type ImageSize = {
   height: number;
 };
 export function PostImage({ uri, vis, id, onPress }: Props2) {
-  const imageUri = uri;
+  const uriArr = uri.split("upload/");
+  const imageUri = uriArr[0] + "upload/q_auto/" + uriArr[1]; 
   var screenWidth = Dimensions.get("window").width;
   const [loading, setLoading] = useState(true);
   const [imageSize, setImageSize] = useState<ImageSize>({

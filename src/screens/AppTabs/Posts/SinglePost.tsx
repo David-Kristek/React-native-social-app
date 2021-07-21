@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/AntDesign";
 import Icona from "react-native-vector-icons/FontAwesome";
 import { Input } from "react-native-elements";
@@ -8,6 +8,7 @@ import User from "../../../components/User";
 import DragGallery from "./DragGallery";
 import PreStyle from "../../../styles/main";
 import SinglePostLogic from "../../../context/logic/SinglePostLogic";
+import Comment from "./Comment";
 interface SinglePostInteface {
   item: { item: Post };
 }
@@ -15,6 +16,7 @@ interface SinglePostInteface {
 export default function SinglePost({ item }: SinglePostInteface) {
   const [commentInput, setCommentInput] = useState("");
   const [lastPress, setLastPress] = useState(0);
+  const [showCommentsNumber, setShowCommentsNumber] = useState(3);
   var post = item.item;
   const { liked, likeCount, like, comments, addComment } = SinglePostLogic({
     postInfo: post,
@@ -28,6 +30,11 @@ export default function SinglePost({ item }: SinglePostInteface) {
       like();
       setLastPress(0);
     }
+  };
+  const comment = () => {
+    if (!commentInput) return;
+    addComment(commentInput);
+    setCommentInput("");
   };
   return (
     <View style={style.container}>
@@ -74,28 +81,48 @@ export default function SinglePost({ item }: SinglePostInteface) {
         </View>
         <Text>{post.description}</Text>
         <View style={style.commentsPreBox}>
-          <Text style={{ color: "dimgray", paddingTop: 4 }}>
-            Zobrazit komentáře (2)
-          </Text>
-          <View style={{ width: 180 }}>
-            <Input
-              placeholder="Přidat komentář"
-              style={{ fontSize: 14, width: 80 }}
-              rightIcon={
-                <Icona
-                  name="send-o"
-                  size={24}
-                  color="grey"
-                  onPress={() => addComment(commentInput)}
+          <View>
+            {comments && comments.length > 0 && (
+              <Text style={{ color: "dimgray", paddingTop: 4, fontSize: 15 }}>
+                Komentáře: ({comments.length})
+              </Text>
+            )}
+            {comments?.map((item, index) => {
+              if (index === showCommentsNumber) return;
+              return (
+                <Comment
+                  text={item.text}
+                  user={item.commentedByUser}
+                  key={index}
                 />
-              }
-              blurOnSubmit
-              onChangeText={(text) => {
-                setCommentInput(text);
-              }}
-            />
+              );
+            })}
           </View>
         </View>
+        {comments && comments.length > 0 && (
+          <TouchableOpacity
+            style={{ alignItems: "center", marginTop: 10 }}
+            onPress={() => {
+              setShowCommentsNumber((number) => number + 3);
+            }}
+          >
+            <Text>Další Komentáře</Text>
+          </TouchableOpacity>
+        )}
+
+        <Input
+          placeholder="Přidat komentář"
+          style={{ fontSize: 14, width: 80 }}
+          rightIcon={
+            <Icona name="send-o" size={24} color="grey" onPress={comment} />
+          }
+          blurOnSubmit
+          onChangeText={(text) => {
+            setCommentInput(text);
+          }}
+          onSubmitEditing={comment}
+          value={commentInput}
+        />
       </View>
     </View>
   );
@@ -120,7 +147,6 @@ const style = StyleSheet.create({
     paddingHorizontal: 10,
   },
   headingIcons: {
-    paddingBottom: 4,
     flexDirection: "row",
     justifyContent: "space-between",
   },
@@ -130,7 +156,6 @@ const style = StyleSheet.create({
   },
   commentsPreBox: {
     flexDirection: "row",
-    justifyContent: "space-between",
     marginRight: 10,
   },
 });

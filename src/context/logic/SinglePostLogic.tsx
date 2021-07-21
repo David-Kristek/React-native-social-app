@@ -22,8 +22,8 @@ export default function SinglePostLogic({ postInfo }: Props) {
     conSocket();
     setlikeCount(postInfo.likedByUsers.length);
     var coms = postInfo.comments.reverse();
+    setLiked(isLiked());
     setComments(coms);
-    isLiked();
   }, []);
   const conSocket = () => {
     socket.on("getComments", (comments) => {
@@ -41,26 +41,24 @@ export default function SinglePostLogic({ postInfo }: Props) {
     return false;
   };
   const like = () => {
+    setLiked((isLiked) => !isLiked);
     fetchPosts("GET", "like/" + postInfo._id).then((res) => {
       if (!res) return;
       if (res.msg) {
         console.log(res.msg);
         if (res.msg === "like") {
-          setLiked(true);
           setlikeCount((curLikeCount) => curLikeCount + 1);
         }
-
         if (res.msg === "unlike") {
-          setLiked(false);
           setlikeCount((curLikeCount) => curLikeCount - 1);
         }
       }
       socket.emit("likeCount", postInfo._id);
     });
   };
-  const addComment = (text: string | undefined) => {
+  const addComment = (text: string) => {
     if (!text || !user) return;
-    fetchPosts("POST", "comment/" + postInfo._id, text).then((res) => {
+    fetchPosts("POST", "comment/" + postInfo._id, {text: text}).then((res) => {
       if (!res) return;
       if (res.msg === "commented") {
         socket.emit("actComment", postInfo._id);
