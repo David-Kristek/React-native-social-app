@@ -43,30 +43,31 @@ export default function SelectImages({
     <>
       <Header>
         <View style={style.container}>
-          <Icon
+          <TouchableOpacity
             onPress={() => {
               navigation.navigate("HomeScreen");
             }}
-            name="arrowleft"
-            size={35}
-            color="#000"
             style={{
               position: "absolute",
               left: 15,
             }}
-          />
+          >
+            <Icon name="arrowleft" size={35} color="#000" />
+          </TouchableOpacity>
           <Text style={{ fontSize: 20 }}>Fotek vybráno: {photosCount}</Text>
-          <Icona
-            name="check"
-            size={35}
-            color="green"
-            style={{
-              opacity: photosCount > 0 ? 1 : 0,
-              position: "absolute",
-              right: 15,
-            }}
+          <TouchableOpacity
             onPress={onSubmit}
-          />
+            style={{ position: "absolute", right: 15 }}
+          >
+            <Icona
+              name="check"
+              size={35}
+              color="green"
+              style={{
+                opacity: photosCount > 0 ? 1 : 0,
+              }}
+            />
+          </TouchableOpacity>
         </View>
       </Header>
       <ImageBrowser

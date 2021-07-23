@@ -4,6 +4,7 @@ import {
   Text,
   StyleSheet,
   ScrollView,
+  SafeAreaView,
   ActivityIndicator,
 } from "react-native";
 import { Input, Button, Image } from "react-native-elements";
@@ -25,7 +26,7 @@ function Register({ navigation }: AuthNavProps<"Register">) {
 
   const onSubmit = (e: any) => {
     e.preventDefault();
-    setLoading(true); 
+    setLoading(true);
     console.log("onsubmit");
     register({
       name,
@@ -34,22 +35,22 @@ function Register({ navigation }: AuthNavProps<"Register">) {
       password_confirmation,
       setLoading,
     }).then((res) => {
-      if(res === "success") {
-        navigation.navigate("Login", {nowLogin: true})
+      if (res === "success") {
+        navigation.navigate("Login", { nowLogin: true });
       }
       setErrors(res);
       setLoading(false);
     });
   };
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.imgCon}>
         <Logo size={80} />
       </View>
       <View style={{ flex: 1, alignItems: "center" }}>
-        <View style={styles.form}>
+        <ScrollView style={styles.form}>
           <Text
-            style={[preStyles.h2, { paddingLeft: "25%", paddingBottom: 10 }]}
+            style={[preStyles.h2, { paddingLeft: "25%", paddingBottom: 10, paddingTop: 30 }]}
           >
             Zaregistrujte se
           </Text>
@@ -111,28 +112,31 @@ function Register({ navigation }: AuthNavProps<"Register">) {
             <Text
               style={preStyles.link}
               onPress={() => {
-                navigation.navigate("Login", {nowLogin: false});
+                navigation.navigate("Login", { nowLogin: false });
               }}
             >
               přihlašte se
             </Text>
           </Text>
-        </View>
+        </ScrollView>
       </View>
-    </ScrollView>
+    </View>
   );
 }
 const styles = StyleSheet.create({
   container: {
     paddingTop: "20%",
+    // alignItems: "center",
+    flex: 1,
   },
   form: {
     width: "95%",
-    flex: 1,
-    paddingTop: "25%",
+    // flex: 1,
+    paddingTop: 0,
+    // paddingBottom: 50
   },
   imgCon: {
-    flex: 1,
+    paddingTop: 5,
     alignItems: "center",
   },
 });

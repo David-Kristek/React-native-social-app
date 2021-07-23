@@ -6,7 +6,7 @@ import { AntDesign, Ionicons, EvilIcons } from "@expo/vector-icons";
 import Posts from "./Posts";
 import Messages from "./Messages"; 
 import SelectImages from "./Posts/AddPost/SelectImages";
-
+import UserPage from "./User"; 
 
 interface AppTabsProps {}
 
@@ -41,7 +41,7 @@ const AppTabs: React.FC<AppTabsProps> = ({}) => {
     >
       <Tabs.Screen name="Home" component={Posts} />
       <Tabs.Screen name="Messages" component={Messages} />
-      <Tabs.Screen name="User" component={Messages} />
+      <Tabs.Screen name="User" component={UserPage} />
     </Tabs.Navigator>
   );
 };

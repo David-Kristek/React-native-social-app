@@ -6,6 +6,7 @@ import {
   FlatList,
   Image,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import { PostsParamProps } from "../PostsParamList";
 import Header from "../Header";
@@ -25,16 +26,18 @@ export default function AddPost({
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
   const [loading, setLoading] = useState(false);
-  const { newFetch } = useContext(PostsContext);
+  const { newFetch, groupPassword } = useContext(PostsContext);
   const UploadSubmit = () => {
     setLoading(true);
-    uploadPost(name, description, location, images).then((res: any) => {
-      setLoading(false);
-      if (res.msg === "Post added") {
-        newFetch();
-        navigation.navigate("HomeScreen");
+    uploadPost(groupPassword, name, description, location, images).then(
+      (res: any) => {
+        setLoading(false);
+        if (res.msg === "Post added") {
+          newFetch();
+          navigation.navigate("HomeScreen");
+        }
       }
-    });
+    );
   };
   const renderItem = ({ item }: any) => (
     <View style={{ paddingHorizontal: 2, paddingTop: 20, paddingBottom: 20 }}>
@@ -53,26 +56,22 @@ export default function AddPost({
     <>
       <Header>
         <View style={style.container}>
-          <Icona
+          <TouchableOpacity
             onPress={() => {
               navigation.goBack();
             }}
-            name="arrowleft"
-            size={35}
-            color="#000"
             style={{
               position: "absolute",
               left: 15,
             }}
-          />
+          >
+            <Icona name="arrowleft" size={35} color="#000" />
+          </TouchableOpacity>
           <Text style={{ fontSize: 20 }}>Nahrajte příspěvek</Text>
           {!loading ? (
-            <Icon
-              name="share-square"
-              size={35}
-              color="dodgerblue"
-              onPress={UploadSubmit}
-            />
+            <TouchableOpacity onPress={UploadSubmit}>
+              <Icon name="share-square" size={35} color="dodgerblue" />
+            </TouchableOpacity>
           ) : (
             <ActivityIndicator color="dodgerblue" size={30} />
           )}

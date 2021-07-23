@@ -1,15 +1,24 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Logo } from "../../../components/Images";
 import Header from "./Header";
 import SinglePost from "./SinglePost";
 import { PostsParamProps } from "./PostsParamList";
 import { PostsContext } from "../../../context/PostsContext";
+import Alerts from "./Alerts";
 
 function Index({ navigation }: PostsParamProps<"HomeScreen">) {
-  const { posts, newFetch } = useContext(PostsContext);
+  const { posts, newFetch, createGroup, joinGroup, groupPassword } =
+    useContext(PostsContext);
   const [refreshing, setRefreshing] = useState(false);
+
   const wait = (timeout: number) => {
     return new Promise((resolve) => setTimeout(resolve, timeout));
   };
@@ -23,27 +32,31 @@ function Index({ navigation }: PostsParamProps<"HomeScreen">) {
   };
   const renderItem = (item: any) => <SinglePost item={item} />;
   return (
-    <View>
-      <Header>
-        <View style={style.container}>
-          <Logo size={48} />
-          <Icon
-            name="plus-square"
-            size={35}
-            color="#31B8F0"
-            onPress={addPost}
+    <>
+      <Alerts />
+      <View>
+        <Header>
+          <View style={style.container}>
+            <Logo size={48} />
+            {groupPassword.length > 0 && (
+              <TouchableOpacity onPress={addPost}>
+                <Icon name="plus-square" size={35} color="#31B8F0" />
+              </TouchableOpacity>
+            )}
+          </View>
+        </Header>
+        {groupPassword.length > 0 && (
+          <FlatList
+            style={style.flatList}
+            data={posts}
+            renderItem={renderItem}
+            keyExtractor={(item) => item._id}
+            onRefresh={RefreshHandler}
+            refreshing={refreshing}
           />
-        </View>
-      </Header>
-      <FlatList
-        style={style.flatList}
-        data={posts}
-        renderItem={renderItem}
-        keyExtractor={(item) => item._id}
-        onRefresh={RefreshHandler}
-        refreshing={refreshing}
-      />
-    </View>
+        )}
+      </View>
+    </>
   );
 }
 const style = StyleSheet.create({

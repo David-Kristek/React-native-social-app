@@ -1,10 +1,18 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "../AuthContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { PostsContext } from "../PostsContext";
 
 function PostLogic() {
   const { token } = useContext(AuthContext);
-  const fetchPosts = async (method: Method, url: string, body?: any) => {
+
+  const fetchPosts = async (
+    groupPassword: string,
+    method: Method,
+    url: string,
+    body?: any
+  ) => {
     try {
       const response = await axios({
         method,
@@ -13,6 +21,7 @@ function PostLogic() {
         headers: {
           token: token,
           "auth-type": "jwt",
+          groupPassword: groupPassword,
         },
       });
       return response.data;
@@ -22,6 +31,7 @@ function PostLogic() {
   };
 
   const uploadPost = async (
+    groupPassword: string,
     name: string,
     description: string,
     location: string,
@@ -41,7 +51,7 @@ function PostLogic() {
         type,
       });
     });
-    
+
     try {
       const response = await axios({
         method: "POST",
@@ -51,9 +61,9 @@ function PostLogic() {
           "content-type": "multipart/form-data",
           token: token,
           "auth-type": "jwt",
+          groupPassword: groupPassword,
         },
       });
-      console.log(response.data);
       return response.data;
     } catch (err) {
       throw err;
@@ -64,7 +74,50 @@ function PostLogic() {
     let labelArr = label.split(",");
     return labelArr[0];
   };
-  return { uploadPost, fetchPosts, formatLocationLabel };
+  const createGroupFetch = async (name: string, password: string) => {
+    try {
+      const response = await axios({
+        method: "POST",
+        url: "http://social-site-server.herokuapp.com/api/groups/add",
+        headers: {
+          token: token,
+          "auth-type": "jwt",
+        },
+        data: {
+          name,
+          groupPassword: password,
+        },
+      });
+      return response.data;
+    } catch (err) {
+      return { err };
+    }
+  };
+  const joinGroupFetch = async (password: string) => {
+    try {
+      const response = await axios({
+        method: "POST",
+        url: "http://social-site-server.herokuapp.com/api/groups/checkPsw",
+        headers: {
+          token: token,
+          "auth-type": "jwt",
+        },
+        data: {
+          groupPassword: password,
+        },
+      });
+      return response.data;
+    } catch (err) {
+      return { err };
+    }
+  };
+  return {
+    uploadPost,
+    fetchPosts,
+    formatLocationLabel,
+    createGroupFetch,
+    joinGroupFetch,
+  };
 }
 
 export default PostLogic;
