@@ -32,13 +32,7 @@ function Login({ navigation, route }: AuthNavProps<"Login">) {
     // console.log(login(email, password));
     // const res = login(email, password);
     login(email, password).then((res) => {
-      if ("user" in res)
-        setUser({
-          username: res.user.name,
-          email: res.user.email,
-          picture: res.user.picture,
-        });
-      setErrors(res);
+      if (res !== "success") setErrors(res);
       setLoading(false);
     });
     // console.log(res);

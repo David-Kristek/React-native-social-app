@@ -99,7 +99,7 @@ export default function SinglePost({ item }: SinglePostInteface) {
             })}
           </View>
         </View>
-        {comments && comments.length > 0 && (
+        {comments && comments.length >= showCommentsNumber && (
           <TouchableOpacity
             style={{ alignItems: "center", marginTop: 10 }}
             onPress={() => {

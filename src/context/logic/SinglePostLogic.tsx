@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
-const ENDPOINT = "http://social-site-server.herokuapp.com";
-import socketIOClient from "socket.io-client";
 import { AuthContext } from "../AuthContext";
 import { PostsContext } from "../PostsContext";
+import { SocketContext } from "../SocketContext";
 import PostLogic from "./PostLogic";
-const socket = socketIOClient(ENDPOINT);
 
 interface Cmt {
   text: string | undefined;
@@ -20,6 +18,7 @@ export default function SinglePostLogic({ postInfo }: Props) {
   const { user } = useContext(AuthContext);
   const { fetchPosts } = PostLogic();
   const { groupPassword } = useContext(PostsContext);
+  const { socket } = useContext(SocketContext);
   useEffect(() => {
     conSocket();
     setlikeCount(postInfo.likedByUsers.length);
@@ -28,7 +27,7 @@ export default function SinglePostLogic({ postInfo }: Props) {
     setComments(coms);
   }, []);
   const conSocket = () => {
-    socket.on("getComments", (comments) => {
+    socket.on("getComments", (comments: Cmt[]) => {
       setComments(comments);
     });
     socket.on("getLikeCount", (num: number) => {

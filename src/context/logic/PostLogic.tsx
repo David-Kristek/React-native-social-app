@@ -94,10 +94,11 @@ function PostLogic() {
     }
   };
   const joinGroupFetch = async (password: string) => {
+    console.log(token);
     try {
       const response = await axios({
         method: "POST",
-        url: "http://social-site-server.herokuapp.com/api/groups/checkPsw",
+        url: "http://10.0.0.7:5000/api/groups/checkPsw",
         headers: {
           token: token,
           "auth-type": "jwt",
@@ -106,6 +107,7 @@ function PostLogic() {
           groupPassword: password,
         },
       });
+      console.log(response.data);
       return response.data;
     } catch (err) {
       return { err };

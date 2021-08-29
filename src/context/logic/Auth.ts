@@ -1,7 +1,4 @@
 import axios from "axios";
-import React, { useContext } from "react";
-import { AuthContext } from "../../context/AuthContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface Register {
   e: any;
@@ -15,7 +12,7 @@ const fetchData = async (method: Method, url: string, body?: any) => {
   try {
     const response = await axios({
       method,
-      url: "http://social-site-server.herokuapp.com/api/auth/" + url,
+      url: "http://10.0.0.7:5000/api/auth/" + url,
       headers: {
         // token: localStorage.getItem("token"),
         // "auth-type": localStorage.getItem("auth-type"),
@@ -53,6 +50,7 @@ export const handleRegiser = async ({
 export const handleLogin = async (email: string, password: string) => {
   const res = await fetchData("POST", "login", { email, password });
   if ("data" in res) {
+    console.log(res.data);
     if ("error" in res.data) {
       // predelat chyby tu i na servru
       return {
@@ -69,8 +67,7 @@ export const handleLogin = async (email: string, password: string) => {
             : "",
       };
     } else if ("user" in res.data) {
-      await AsyncStorage.setItem("token", res.data.token);
-      return { user: res.data.user };
+      return { user: res.data.user, token: res.data.token };
     }
   }
   return { email: "", password: "", all: "Oops, něco se pokazilo" };

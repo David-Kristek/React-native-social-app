@@ -33,26 +33,50 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState("");
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    AuhtControl();
+    let isActive = true;
+    AsyncStorage.getItem("token").then((token) => {
+      if (isActive) {
+        if (!token) {
+          setLoading(false);
+          console.log("not logged");
+          return;
+        }
+        setToken(token);
+        Auth.checkAuth(token).then((res) => {
+          if (isActive) {
+            if (res) {
+              setUser({
+                username: res.name,
+                email: res.email,
+                picture: res.picture,
+              });
+            }
+            console.log("auth fetched");
+            setLoading(false);
+          }
+        });
+      }
+    });
+    return () => {
+      isActive = false;
+    };
   }, []);
-  const AuhtControl = async () => {
-    const token = await AsyncStorage.getItem("token");
-    if (!token) {
-      setLoading(false);
-      console.log("not logged");
-      return;
-    }
-    setToken(token);
-    const res = await Auth.checkAuth(token);
-    if (res) {
+  const login = async (email: string, password: string) => {
+    const res = await Auth.handleLogin(email, password);
+    if ("token" in res) {
       setUser({
-        username: res.name,
-        email: res.email,
-        picture: res.picture,
+        username: res.user.name,
+        email: res.user.email,
+        picture: res.user.picture,
       });
-    }
-    console.log("auth fetched");
-    setLoading(false);
+      setToken(res.token);
+      await AsyncStorage.setItem("token", res.token);
+      return "success";
+    } else return res;
+  };
+  const logout = () => {
+    setUser(null);
+    AsyncStorage.setItem("token", "");
   };
   return (
     <AuthContext.Provider
@@ -60,13 +84,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         user,
         token,
         register: Auth.handleRegiser,
-        login: Auth.handleLogin,
-        logout: () => {
-          setUser(null);
-          //  clear token
-        },
-        setUser: setUser,
-        loading: loading,
+        login,
+        logout,
+        setUser,
+        loading,
       }}
     >
       {children}

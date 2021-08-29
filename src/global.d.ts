@@ -1,7 +1,7 @@
 declare global {
   type Comment = { text: string; commentedByUser: otherUser };
   type Method = "GET" | "POST" | "DELETE" | "PUT";
-  type User = null | { username: string; email: string; picture: string; };
+  type User = null | { username: string; email: string; picture: string };
   interface Category {
     name: string;
     _id: string;
@@ -32,7 +32,7 @@ declare global {
     description: string;
     createdByUser: otherUser;
     createdAt: Date;
-    dateInString: string; 
+    dateInString: string;
     likedByUsers: otherUser[];
     comments: Comment[];
   }
@@ -46,6 +46,11 @@ declare global {
   type mapCoors = {
     x: number;
     y: number;
+  };
+  type message = {
+    text: string;
+    sentByUser: User;
+    createdAt: Date;
   };
 }
 export {};

@@ -25,7 +25,7 @@ interface MenuItem {
 const windowWidth = Dimensions.get("window").width;
 
 export default function UserPage() {
-  const { user } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
   const { joinNewGroup } = useContext(PostsContext);
   const leftTranslate = new Animated.Value(windowWidth);
   const isOpended = useRef(false);
@@ -90,8 +90,8 @@ export default function UserPage() {
         style={[style.menuBox, { transform: [{ translateX: leftTranslate }] }]}
       >
         <MenuItem text="Nastavení" onClick={() => {}} />
-        <MenuItem text="Odhlásit se" onClick={() => {}} />
-        <MenuItem text="Přidat novou skupinu" onClick={() => {joinNewGroup()}} />
+        <MenuItem text="Odhlásit se" onClick={logout} />
+        <MenuItem text="Přidat novou skupinu" onClick={joinNewGroup} />
         <MenuItem text="Skupiny:" onClick={() => {}} fontWeight />
         <TouchableHighlight>
           <Text style={style.groups}>For fun</Text>

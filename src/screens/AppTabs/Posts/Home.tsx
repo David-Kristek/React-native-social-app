@@ -18,7 +18,10 @@ function Index({ navigation }: PostsParamProps<"HomeScreen">) {
   const { posts, newFetch, createGroup, joinGroup, groupPassword } =
     useContext(PostsContext);
   const [refreshing, setRefreshing] = useState(false);
-
+  const [numberOfRenderedPosts, setNumberOfRenderedPosts] = useState(0);
+  useEffect(() => {
+    setNumberOfRenderedPosts(5);
+  }, []);
   const wait = (timeout: number) => {
     return new Promise((resolve) => setTimeout(resolve, timeout));
   };
@@ -28,8 +31,13 @@ function Index({ navigation }: PostsParamProps<"HomeScreen">) {
   const RefreshHandler = () => {
     setRefreshing(true);
     newFetch();
+    setNumberOfRenderedPosts(5);
     wait(1000).then(() => setRefreshing(false));
   };
+  const endReachHandler = () => {
+    setNumberOfRenderedPosts((curNm) => curNm + 4);
+  };
+
   const renderItem = (item: any) => <SinglePost item={item} />;
   return (
     <>
@@ -48,11 +56,12 @@ function Index({ navigation }: PostsParamProps<"HomeScreen">) {
         {groupPassword.length > 0 && (
           <FlatList
             style={style.flatList}
-            data={posts}
+            data={posts?.slice(0, numberOfRenderedPosts)}
             renderItem={renderItem}
             keyExtractor={(item) => item._id}
             onRefresh={RefreshHandler}
             refreshing={refreshing}
+            onEndReached={endReachHandler}
           />
         )}
       </View>

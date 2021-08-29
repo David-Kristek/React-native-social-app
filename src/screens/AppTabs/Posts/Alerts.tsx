@@ -30,7 +30,7 @@ export default function Alerts() {
             if (!groupPasswordInput) return;
             const res = await joinGroup(groupPasswordInput);
             if (res.name) {
-              alert(
+              Alert.alert(res.name, 
                 "Gratulujeme úspěšně jste se připojili ke skupině " +
                   res.name +
                   ", která byla vytvořena: " +

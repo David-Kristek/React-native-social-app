@@ -38,46 +38,54 @@ export const PostsProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [comments, setComments] = useState<Cmt[]>();
 
   useEffect(() => {
+    let isActive = true;
     AsyncStorage.getItem("posts").then((res) => {
-      if (res) {
+      if (res && isActive) {
         const convRes: Post[] = JSON.parse(res);
         setPosts(convRes);
         setpostLoading(false);
       }
     });
     AsyncStorage.getItem("groupPassword").then((res) => {
-      console.log("group password", res);
-      if (res) setGroupPassword(res);
-      else {
-        setpostLoading(false);
-        return;
-      }
-      fetchPosts(res, "GET", "").then((res) => {
-        const posts = res.map((post: Post) => {
-          let dateObject = new Date(post.createdAt);
-          let formatedLabel = post.location
-            ? formatLocationLabel(post.location.label)
-            : "";
-          if (!post.location)
-            return { ...post, dateInString: dateObject.toDateString() };
-          return {
-            ...post,
-            dateInString: dateObject.toDateString(),
-            // location: { ...location, label: formatedLabel },
-          };
-        });
-        setPosts(posts);
-        const stringPosts = JSON.stringify(posts);
-        AsyncStorage.setItem("posts", stringPosts)
-          .then(() => {
-            if (postloading) setpostLoading(false);
-            console.log("posts fetched");
-          })
-          .catch((err) => {
-            console.log(err);
+      if (isActive) {
+        console.log("group password", res);
+        if (res) {
+          setGroupPassword(res);
+        } else {
+          setpostLoading(false);
+          return;
+        }
+        fetchPosts(res, "GET", "").then((res) => {
+          if(!isActive) return; 
+          const posts = res.map((post: Post) => {
+            let dateObject = new Date(post.createdAt);
+            let formatedLabel = post.location
+              ? formatLocationLabel(post.location.label)
+              : "";
+            if (!post.location)
+              return { ...post, dateInString: dateObject.toDateString() };
+            return {
+              ...post,
+              dateInString: dateObject.toDateString(),
+              // location: { ...location, label: formatedLabel },
+            };
           });
-      });
+          setPosts(posts);
+          const stringPosts = JSON.stringify(posts);
+          AsyncStorage.setItem("posts", stringPosts)
+            .then(() => {
+              if (postloading) setpostLoading(false);
+              console.log("posts fetched");
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        });
+      }
     });
+    return () => {
+      isActive = false;
+    };
   }, [fetching]);
   const newFetch = () => {
     setFetching((actFetching) => !actFetching);
