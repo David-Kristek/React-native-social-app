@@ -3,7 +3,7 @@ import axios from "axios";
 import { AuthContext } from "../AuthContext";
 import { PostsContext } from "../PostsContext";
 import { SocketContext } from "../SocketContext";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function MessageLogic() {
   const { token, user } = useContext(AuthContext);
   const { groupPassword } = useContext(PostsContext);
@@ -19,17 +19,24 @@ export default function MessageLogic() {
   const { socket } = useContext(SocketContext);
   useEffect(() => {
     let isActive = true;
-    console.log("fetching messages");
+    AsyncStorage.getItem("messages").then((res) => {
+      if (isActive && res) setMessages(JSON.parse(res));
+    });
     conSocket();
-    getPosts().then((res) => {
+
+    getMessages().then((res) => {
       if (isActive) {
-        setMessages(res.length < 2 ? res : res.reverse());
+        console.log("messages fetched");
+        const msgs = res.length < 2 ? res : res.reverse();
+        setMessages(msgs);
         setLoading(false);
+        AsyncStorage.setItem("messages", JSON.stringify(msgs));
       }
     });
     axios
       .get(
-        "http://10.0.0.7:5000/api/groups/getName?groupPassword=" + groupPassword
+        "http://social-site-server.herokuapp.com/api/groups/getName?groupPassword=" +
+          groupPassword
       )
       .then((res) => {
         if (isActive)
@@ -39,11 +46,11 @@ export default function MessageLogic() {
       isActive = false;
     };
   }, []);
-  const getPosts = async () => {
+  const getMessages = async () => {
     try {
       const response = await axios({
         method: "POST",
-        url: "http://10.0.0.7:5000/api/chat",
+        url: "http://social-site-server.herokuapp.com/api/chat",
         headers: {
           token: token,
           "auth-type": "jwt",
@@ -52,6 +59,7 @@ export default function MessageLogic() {
       });
       return response.data.resp;
     } catch (err) {
+      console.log(err);
       return { err };
     }
   };

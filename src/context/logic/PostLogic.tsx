@@ -98,7 +98,7 @@ function PostLogic() {
     try {
       const response = await axios({
         method: "POST",
-        url: "http://10.0.0.7:5000/api/groups/checkPsw",
+        url: "http://social-site-server.herokuapp.com/api/groups/checkPsw",
         headers: {
           token: token,
           "auth-type": "jwt",

@@ -19,32 +19,18 @@ function Index() {
   const { messages, addMessage, loading, groupName } = MessageLogic();
   const { user } = useContext(AuthContext);
   const [lastDate, setLastDate] = useState(0);
+  const [numberOfRenderItems, setNumberOfRenderItems] = useState(10);
   // react native usestate inflatlist render item
   const renderItem = useCallback(
     ({ item, index }: any) => {
-      const createdAt = new Date(item.createdAt).getTime();
+      const createdAt = new Date(item.createdAt);
       const lastDateC =
         index < messages.length - 1
-          ? new Date(messages[index + 1].createdAt).getTime()
-          : 0;
+          ? new Date(messages[index + 1].createdAt)
+          : null;
 
-      if (createdAt - lastDateC > 600000) {
-        return (
-          <>
-            <Message
-              text={item.text}
-              type={
-                item.sentByUser.email !== user?.email
-                  ? "my-message"
-                  : "others-message"
-              }
-              username={item.sentByUser.name ?? item.sentByUser.username}
-            />
-            <Time val={new Date(item.createdAt)} />
-          </>
-        );
-      } else {
-        return (
+      return (
+        <>
           <Message
             text={item.text}
             type={
@@ -54,11 +40,22 @@ function Index() {
             }
             username={item.sentByUser.name ?? item.sentByUser.username}
           />
-        );
-      }
+          <Time itemDate={createdAt} preDate={lastDateC} />
+        </>
+      );
     },
     [messages]
   );
+  useEffect(() => {
+    setNumberOfRenderItems(10);
+    return () => {
+      setNumberOfRenderItems(10);
+      
+    };
+  }, []);
+  const endReachedHandler = () => {
+    setNumberOfRenderItems((cr) => (cr += 5));
+  };
   if (!messages || loading) return <></>;
   // async storage messages
   return (
@@ -70,9 +67,11 @@ function Index() {
       </Header>
       <View style={style.mesContainer}>
         <FlatList
-          data={messages}
+          data={messages.slice(0, numberOfRenderItems)}
           renderItem={renderItem}
           keyExtractor={(item, index) => "key" + index}
+          onEndReachedThreshold={0.1}
+          onEndReached={endReachedHandler}
           inverted
         />
       </View>

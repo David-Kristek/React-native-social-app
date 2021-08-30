@@ -12,7 +12,7 @@ const fetchData = async (method: Method, url: string, body?: any) => {
   try {
     const response = await axios({
       method,
-      url: "http://10.0.0.7:5000/api/auth/" + url,
+      url: "http://social-site-server.herokuapp.com/api/auth/" + url,
       headers: {
         // token: localStorage.getItem("token"),
         // "auth-type": localStorage.getItem("auth-type"),
