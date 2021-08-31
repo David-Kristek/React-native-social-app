@@ -10,7 +10,7 @@ export const Providers: React.FC<ProvidersProps> = ({}) => {
     <AuthProvider>
       <PostsProvider>
         <SocketProvider>
-          <Routes />
+            <Routes />
         </SocketProvider>
       </PostsProvider>
     </AuthProvider>

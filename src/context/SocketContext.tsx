@@ -1,6 +1,6 @@
 import React, { createContext, useContext, FC, useState, useMemo } from "react";
 // const ENDPOINT = "http://social-site-server.herokuapp.com";
-const ENDPOINT = "http://social-site-server.herokuapp.com";
+const ENDPOINT = "http://10.0.0.2:5000";
 import socketIOClient from "socket.io-client";
 import { PostsContext } from "./PostsContext";
 

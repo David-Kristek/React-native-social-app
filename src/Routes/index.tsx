@@ -12,7 +12,7 @@ function Routes() {
 
   return (
     <NavigationContainer>
-      {loading || postloading ? <LoadingScreen /> : user ? <App /> : <Auth />}
+      {postloading || loading? <LoadingScreen /> : user ? <App /> : <Auth />}
     </NavigationContainer>
   );
 }

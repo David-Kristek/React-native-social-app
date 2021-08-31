@@ -16,7 +16,7 @@ function PostLogic() {
     try {
       const response = await axios({
         method,
-        url: "http://social-site-server.herokuapp.com/api/posts/" + url,
+        url: "http://10.0.0.2:5000/api/posts/" + url,
         data: body,
         headers: {
           token: token,
@@ -55,7 +55,7 @@ function PostLogic() {
     try {
       const response = await axios({
         method: "POST",
-        url: "http://social-site-server.herokuapp.com/api/posts/add",
+        url: "http://10.0.0.2:5000/api/posts/add",
         data: formData,
         headers: {
           "content-type": "multipart/form-data",
@@ -78,7 +78,7 @@ function PostLogic() {
     try {
       const response = await axios({
         method: "POST",
-        url: "http://social-site-server.herokuapp.com/api/groups/add",
+        url: "http://10.0.0.2:5000/api/groups/add",
         headers: {
           token: token,
           "auth-type": "jwt",
@@ -98,7 +98,7 @@ function PostLogic() {
     try {
       const response = await axios({
         method: "POST",
-        url: "http://social-site-server.herokuapp.com/api/groups/checkPsw",
+        url: "http://10.0.0.2:5000/api/groups/checkPsw",
         headers: {
           token: token,
           "auth-type": "jwt",
