@@ -8,7 +8,6 @@ type LoginParams = {
 };
 interface AuthContextInterface {
   user: User;
-  token: string;
   login: (email: string, password: string) => Promise<any>;
   register: (obj: any) => Promise<any>;
   logout: () => void;
@@ -18,7 +17,6 @@ interface AuthContextInterface {
 
 export const AuthContext = React.createContext<AuthContextInterface>({
   user: null,
-  token: "",
   login: async () => {},
   logout: () => {},
   register: async () => {},
@@ -30,31 +28,27 @@ interface AuthProviderProps {}
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User>(null);
-  const [token, setToken] = useState("");
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     let isActive = true;
-    AsyncStorage.getItem("token").then((token) => {
+    AsyncStorage.getItem("user").then((userFromStorageString) => {
       if (isActive) {
-        if (!token) {
-          setLoading(false);
+        if (!userFromStorageString) {
           console.log("not logged");
+          setLoading(false);
           return;
         }
-        setToken(token);
-        Auth.checkAuth(token).then((res) => {
-          if (isActive) {
-            if (res) {
-              setUser({
-                username: res.name,
-                email: res.email,
-                picture: res.picture,
-              });
-            }
-            console.log("auth fetched");
-            setLoading(false);
-          }
+        const userFromStorage: User = JSON.parse(userFromStorageString);
+        if (!userFromStorage) return;
+        console.log(userFromStorage, "userFromStorage");
+        setUser({
+          username: userFromStorage.username,
+          email: userFromStorage.email,
+          picture: userFromStorage.picture,
+          token: userFromStorage.token,
         });
+        setLoading(false);
+        console.log("auth fetched");
       }
     });
     return () => {
@@ -63,26 +57,34 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
   const login = async (email: string, password: string) => {
     const res = await Auth.handleLogin(email, password);
+    console.log(res, "logged");
     if ("token" in res) {
       setUser({
         username: res.user.name,
         email: res.user.email,
         picture: res.user.picture,
+        token: res.token,
       });
-      setToken(res.token);
-      await AsyncStorage.setItem("token", res.token);
+      await AsyncStorage.setItem(
+        "user",
+        JSON.stringify({
+          username: res.user.name,
+          email: res.user.email,
+          picture: res.user.picture,
+          token: res.token,
+        })
+      );
       return "success";
     } else return res;
   };
   const logout = () => {
     setUser(null);
-    AsyncStorage.setItem("token", "");
+    AsyncStorage.setItem("user", "");
   };
   return (
     <AuthContext.Provider
       value={{
         user,
-        token,
         register: Auth.handleRegiser,
         login,
         logout,

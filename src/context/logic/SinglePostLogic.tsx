@@ -20,6 +20,7 @@ export default function SinglePostLogic({ postInfo }: Props) {
   const { groupPassword } = useContext(PostsContext);
   const { socket } = useContext(SocketContext);
   useEffect(() => {
+    console.log(user, "single post logic");
     conSocket();
     setlikeCount(postInfo.likedByUsers.length);
     var coms = postInfo.comments.reverse();

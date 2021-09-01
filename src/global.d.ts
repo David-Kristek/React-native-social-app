@@ -1,7 +1,12 @@
 declare global {
   type Comment = { text: string; commentedByUser: otherUser };
   type Method = "GET" | "POST" | "DELETE" | "PUT";
-  type User = null | { username: string; email: string; picture: string };
+  type User = null | {
+    username: string;
+    email: string;
+    picture: string;
+    token: string;
+  };
   interface Category {
     name: string;
     _id: string;

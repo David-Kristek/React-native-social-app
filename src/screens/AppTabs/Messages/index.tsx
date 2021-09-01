@@ -16,13 +16,14 @@ import { AuthContext } from "../../../context/AuthContext";
 function Index() {
   const input = useRef({ value: "" });
   const inputR = useRef<TextInput>(null);
-  const { messages, addMessage, loading, groupName } = MessageLogic();
+  const { messages, addMessage, groupName } = MessageLogic();
   const { user } = useContext(AuthContext);
   const [lastDate, setLastDate] = useState(0);
   const [numberOfRenderItems, setNumberOfRenderItems] = useState(10);
   // react native usestate inflatlist render item
   const renderItem = useCallback(
     ({ item, index }: any) => {
+      if (!messages) return <></>;
       const createdAt = new Date(item.createdAt);
       const lastDateC =
         index < messages.length - 1
@@ -50,13 +51,11 @@ function Index() {
     setNumberOfRenderItems(10);
     return () => {
       setNumberOfRenderItems(10);
-      
     };
   }, []);
   const endReachedHandler = () => {
     setNumberOfRenderItems((cr) => (cr += 5));
   };
-  if (!messages || loading) return <></>;
   // async storage messages
   return (
     <View style={{ flex: 1 }}>
@@ -66,14 +65,16 @@ function Index() {
         </View>
       </Header>
       <View style={style.mesContainer}>
-        <FlatList
-          data={messages.slice(0, numberOfRenderItems)}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => "key" + index}
-          onEndReachedThreshold={0.1}
-          onEndReached={endReachedHandler}
-          inverted
-        />
+        {messages && (
+          <FlatList
+            data={messages.slice(0, numberOfRenderItems)}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => "key" + index}
+            onEndReachedThreshold={0.1}
+            onEndReached={endReachedHandler}
+            inverted
+          />
+        )}
       </View>
       <View style={style.inputBox}>
         <TextInput

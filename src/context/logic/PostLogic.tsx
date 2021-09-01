@@ -5,7 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { PostsContext } from "../PostsContext";
 
 function PostLogic() {
-  const { token } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   const fetchPosts = async (
     groupPassword: string,
@@ -16,10 +16,10 @@ function PostLogic() {
     try {
       const response = await axios({
         method,
-        url: "http://10.0.0.2:5000/api/posts/" + url,
+        url: "http://social-site-server.herokuapp.com/api/posts/" + url,
         data: body,
         headers: {
-          token: token,
+          token: user?.token,
           "auth-type": "jwt",
           groupPassword: groupPassword,
         },
@@ -55,11 +55,11 @@ function PostLogic() {
     try {
       const response = await axios({
         method: "POST",
-        url: "http://10.0.0.2:5000/api/posts/add",
+        url: "http://social-site-server.herokuapp.com/api/posts/add",
         data: formData,
         headers: {
           "content-type": "multipart/form-data",
-          token: token,
+          token: user?.token,
           "auth-type": "jwt",
           groupPassword: groupPassword,
         },
@@ -78,9 +78,9 @@ function PostLogic() {
     try {
       const response = await axios({
         method: "POST",
-        url: "http://10.0.0.2:5000/api/groups/add",
+        url: "http://social-site-server.herokuapp.com/api/groups/add",
         headers: {
-          token: token,
+          token: user?.token,
           "auth-type": "jwt",
         },
         data: {
@@ -94,13 +94,12 @@ function PostLogic() {
     }
   };
   const joinGroupFetch = async (password: string) => {
-    console.log(token);
     try {
       const response = await axios({
         method: "POST",
-        url: "http://10.0.0.2:5000/api/groups/checkPsw",
+        url: "http://social-site-server.herokuapp.com/api/groups/checkPsw",
         headers: {
-          token: token,
+          token: user?.token,
           "auth-type": "jwt",
         },
         data: {

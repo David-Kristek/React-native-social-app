@@ -43,6 +43,7 @@ export const PostsProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (res && isActive) {
         const convRes: Post[] = JSON.parse(res);
         setPosts(convRes);
+        console.log("post loading false");
         setpostLoading(false);
       }
     });

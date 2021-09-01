@@ -5,17 +5,10 @@ import { PostsContext } from "../PostsContext";
 import { SocketContext } from "../SocketContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function MessageLogic() {
-  const { token, user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const { groupPassword } = useContext(PostsContext);
-  const [loading, setLoading] = useState(true);
   const [groupName, setGroupName] = useState("");
-  const [messages, setMessages] = useState<message[]>([
-    {
-      text: "",
-      sentByUser: null,
-      createdAt: new Date(),
-    },
-  ]);
+  const [messages, setMessages] = useState<message[]>();
   const { socket } = useContext(SocketContext);
   useEffect(() => {
     let isActive = true;
@@ -23,13 +16,11 @@ export default function MessageLogic() {
       if (isActive && res) setMessages(JSON.parse(res));
     });
     conSocket();
-
     getMessages().then((res) => {
       if (isActive) {
         console.log("messages fetched");
         const msgs = res.length < 2 ? res : res.reverse();
         setMessages(msgs);
-        setLoading(false);
         AsyncStorage.setItem("messages", JSON.stringify(msgs));
       }
     });
@@ -52,7 +43,7 @@ export default function MessageLogic() {
         method: "POST",
         url: "http://social-site-server.herokuapp.com/api/chat",
         headers: {
-          token: token,
+          token: user?.token,
           "auth-type": "jwt",
           groupPassword,
         },
@@ -81,5 +72,5 @@ export default function MessageLogic() {
         : [{ text, sentByUser: user, createdAt: new Date() }]
     );
   };
-  return { messages, addMessage, loading, groupName };
+  return { messages, addMessage, groupName };
 }

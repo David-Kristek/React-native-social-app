@@ -15,7 +15,7 @@ type Error = {
 
 function Login({ navigation, route }: AuthNavProps<"Login">) {
   const { nowLogin } = route.params;
-  const { login, setUser } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);

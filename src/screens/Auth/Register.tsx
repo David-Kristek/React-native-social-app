@@ -16,7 +16,7 @@ import preStyles from "../../styles/main";
 import { Logo } from "../../components/Images";
 
 function Register({ navigation }: AuthNavProps<"Register">) {
-  const { register, setUser } = useContext(AuthContext);
+  const { register } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
