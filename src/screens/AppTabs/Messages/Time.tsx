@@ -17,11 +17,13 @@ export default function Time({ itemDate, preDate }: Props) {
 
   return (
     <>
-      {preDate && itemDate.getTime() - preDate.getTime() > (new Date().getDate() !== itemDate.getDate() ? 3600000 : 30000)  && (
-        <View style={{ width: "100%", alignItems: "center", paddingTop: 40 }}>
-          <Text style={{ color: "grey" }}>{time}</Text>
-        </View>
-      )}
+      {preDate &&
+        itemDate.getTime() - preDate.getTime() >
+          (new Date().getDate() !== itemDate.getDate() ? 3600000 : 30000) && (
+          <View style={{ width: "100%", alignItems: "center", paddingTop: 40 }}>
+            <Text style={{ color: "grey" }}>{time}</Text>
+          </View>
+        )}
     </>
   );
 }
