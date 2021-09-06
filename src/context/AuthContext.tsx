@@ -57,7 +57,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
   const login = async (email: string, password: string) => {
     const res = await Auth.handleLogin(email, password);
-    console.log(res, "logged");
     if ("token" in res) {
       setUser({
         username: res.user.name,

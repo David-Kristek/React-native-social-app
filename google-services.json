@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "236995755291",
+    "project_id": "react-node-login-312209",
+    "storage_bucket": "react-node-login-312209.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:236995755291:android:36c9a7934295a4407e67be",
+        "android_client_info": {
+          "package_name": "david.kristek.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "236995755291-85hhe3gi2eaofgemhvcbv1horm067upu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7o5x5H4RM-TAqSZvgef9xvK59luqJE9c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "236995755291-85hhe3gi2eaofgemhvcbv1horm067upu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

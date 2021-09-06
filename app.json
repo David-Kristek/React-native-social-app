@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "social site",
-    "slug": "social-site",
-    "version": "1.0.2",
+    "name": "simple social",
+    "slug": "simple-social",
+    "version": "2.0",
     "orientation": "portrait",
     "icon": "./assets/icona.png",
     "splash": {
@@ -13,9 +13,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -24,7 +22,9 @@
         "foregroundImage": "./assets/icona.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "david.kristek.app"
+      "package": "david.kristek.app",
+      "googleServicesFile": "./google-services.json",
+      "useNextNotificationsApi": true
     },
     "web": {
       "favicon": "./assets/icona.png"

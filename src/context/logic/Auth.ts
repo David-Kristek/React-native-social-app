@@ -44,13 +44,20 @@ export const handleRegiser = async ({
       return res.data.error;
     }
   }
-  console.log(res);
   return "Oops, něco se pokazilo";
   // now login
 };
 export const handleLogin = async (email: string, password: string) => {
-  const expotoken = await getExpoToken(); 
+  let expotoken;
+  try {
+    expotoken = await getExpoToken();
+  } catch (err) {
+    console.log(err);
+    expotoken = err;
+  }
+
   const res = await fetchData("POST", "login", { email, password, expotoken });
+
   if ("data" in res) {
     console.log(res.data);
     if ("error" in res.data) {

@@ -16,9 +16,7 @@ export const getExpoToken = async () => {
       alert("Failed to get push token for push notfiication!");
       return;
     }
-    console.log(token);
     token = (await Notifications.getExpoPushTokenAsync()).data;
-    return token;
   } else {
     alert("Must use physical device for Push Notifications");
   }
@@ -31,4 +29,6 @@ export const getExpoToken = async () => {
       lightColor: "#FF231F7C",
     });
   }
+  return token;
+
 };
